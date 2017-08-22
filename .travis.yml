@@ -4,16 +4,16 @@ dist: trusty
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y git wget make libncurses-dev flex bison gperf python python-serial
+install:
+  - pip install pyserial
 before_script:
-  - cd ..
-  - git clone --depth=0 --recursive https://github.com/espressif/esp-idf.git
+  - pushd ..
+  - git clone --depth=1 --recursive https://github.com/espressif/esp-idf.git
   - export IDF_PATH=`pwd`/esp-idf
-  - echo $IDF_PATH
-  - wget https://dl.espressif.com/dl/xtensa-esp32-elf-linux32-1.22.0-61-gab8375a-5.2.0.tar.gz
-  - tar xfz xtensa-esp32-elf-linux32-1.22.0-61-gab8375a-5.2.0.tar.gz
+  - wget https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
+  - tar xfz xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz
   - export PATH=`pwd`/xtensa-esp32-elf/bin:$PATH
-  - echo $PATH
-  - ls -la .
+  - popd
 script:
   - echo Building on $TRAVIS_OS_NAME for $TRAVIS_BRANCH...
   - cd src

@@ -6,7 +6,6 @@ MONO_OUTPUT_DIR := output
 MONO_LIB_DIR := $(MONO_OUTPUT_DIR)
 MONO_INCLUDE_DIR := $(MONO_LIB_DIR)/include
 ESP_LIB_DIR := $(MONO_OUTPUT_DIR)/esp
-ESP_INCLUDE_DIR := $(ESP_LIB_DIR)/include
 ESP_LDSCRIPT_DIR := $(ESP_LIB_DIR)/ld
 
 .PHONY: framework framework-clean debug components component-headers esptool
@@ -23,8 +22,6 @@ sdkconfig: defconfig
 	@echo $(SEPARATOR)
 	@echo If the above gave errors, you can most likely ignore them.
 
-INCLUDE_DIRS := $(wildcard $(COMPONENT_INCLUDES))
-
 components: $(foreach component,$(COMPONENT_PATHS),component-$(notdir $(component)-build))
 	mkdir -p $(ESP_LIB_DIR)
 	cp $(foreach libcomp,$(COMPONENT_LIBRARIES),$(BUILD_DIR_BASE)/$(libcomp)/lib$(libcomp).a) $(ESP_LIB_DIR)/
@@ -36,26 +33,16 @@ components: $(foreach component,$(COMPONENT_PATHS),component-$(notdir $(componen
 	cp $(IDF_PATH)/components/esp32/ld/*.ld $(ESP_LDSCRIPT_DIR)/
 	find $(ESP_LIB_DIR) \( -name '*.ld' -o -name '*.a' \) -exec chmod -x '{}' ';'
 
+# Remove non-existing include dirs and this "project" include (which is last).
+INCLUDE_DIRS := $(wildcard $(filter-out $(lastword $(COMPONENT_INCLUDES)),$(COMPONENT_INCLUDES)))
+
 component-headers:
-	mkdir -p $(ESP_INCLUDE_DIR)
-	cp -r $(foreach dir,$(INCLUDE_DIRS),$(dir)/*) $(ESP_INCLUDE_DIR)/
-	find $(ESP_INCLUDE_DIR) -type f -exec chmod -x '{}' ';'
+	$(foreach dir,$(INCLUDE_DIRS),mkdir -p $(ESP_LIB_DIR)/$(subst $(IDF_PATH)/components/,,$(dir)); cp -R $(dir)/ $(ESP_LIB_DIR)/$(subst $(IDF_PATH)/components/,,$(dir));)
+	find $(ESP_LIB_DIR) -name '*.h' -exec chmod -x '{}' ';'
 
 esptool:
 	cp $(IDF_PATH)/components/esptool_py/esptool/esptool.py $(ESP_LIB_DIR)/
 
 debug:
-	@echo Component paths: $(COMPONENT_PATHS)
-	@echo Components: $(foreach component,$(COMPONENT_PATHS),$(notdir $(component)))
-	@echo $(SEPARATOR)
-	@echo CPPFLAGS=$(CPPFLAGS)
-	@echo CFLAGS=$(CFLAGS)
-	@echo CXXFLAGS=$(CXXFLAGS)
-	@echo $(SEPARATOR)
-	@echo LDFLAGS=$(LDFLAGS)
-	@echo CC=$(CC)
-	@echo CXX=$(CXX)
-	@echo LD=$(LD)
-	@echo AR=$(AR)
-	@echo OBJCOPY=$(OBJCOPY)
-	@echo SIZE=$(SIZE)
+	@echo INCLUDE_DIRS=$(INCLUDE_DIRS)
+	@echo ESP_INCLUDE_DIR=$(foreach dir,$(INCLUDE_DIRS),$(subst $(IDF_PATH)/components/,,$(dir)))

@@ -14,7 +14,8 @@ MONO_OUTPUT_DIR := $(MONO_PATH)/output
 MONO_LIB_DIR := $(MONO_OUTPUT_DIR)
 MONO_INCLUDE_DIR := $(MONO_LIB_DIR)/include
 ESP_LIB_DIR := $(MONO_OUTPUT_DIR)/esp
-ESP_INCLUDE_DIR := $(ESP_LIB_DIR)/include
+# Wrong:
+ESP_INCLUDE_DIR := $(wildcard $(ESP_LIB_DIR)/*/include)
 ESP_LDSCRIPT_DIR := $(ESP_LIB_DIR)/ld
 
 LDFLAGS=-nostdlib -u call_user_start_cpu0 -Wl,--gc-sections -Wl,-static -Wl,--start-group \

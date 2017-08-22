@@ -2,5 +2,8 @@
   [ { "path": ".."
     , "file_exclude_patterns": ["*.elf","*.map","*.d","*.bin"]
     }
+   , { "path": "../../esp-idf"
+    , "file_exclude_patterns": []
+    }
   ]
 }
