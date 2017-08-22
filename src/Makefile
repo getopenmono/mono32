@@ -7,7 +7,7 @@ MONO_INCLUDE_DIR := $(MONO_LIB_DIR)/include
 ESP_LIB_DIR := $(MONO_OUTPUT_DIR)/esp
 ESP_LDSCRIPT_DIR := $(ESP_LIB_DIR)/ld
 
-MONO_SNIPPET := $(MONO_OUTPUT_DIR)/mono.mk
+MONO_SNIPPET := $(MONO_OUTPUT_DIR)/mono-env.mk
 
 .PHONY: framework framework-clean debug components component-headers esptool snippets
 
@@ -51,10 +51,6 @@ snippets:
 	@echo Creating $(MONO_SNIPPET)
 	@echo '# Generated Mono framework environment.' > $(MONO_SNIPPET)
 	@echo '' >> $(MONO_SNIPPET)
-	@echo '# Use like this in your Makefile:' >> $(MONO_SNIPPET)
-	@echo '#     MONO_PATH=/usr/local/openmono' >> $(MONO_SNIPPET)
-	@echo '#     include $$(MONO_PATH)/mono.mk' >> $(MONO_SNIPPET)
-	@echo '' >> $(MONO_SNIPPET)
 	@echo ESP_LIB_DIR := $$\(MONO_PATH\)/esp >> $(MONO_SNIPPET)
 	@echo ESP_LDSCRIPT_DIR := $$\(ESP_LIB_DIR\)/ld >> $(MONO_SNIPPET)
 	@echo ESP_INCLUDE_DIRS := $(foreach dir,$(INCLUDE_DIRS),$(subst $(IDF_PATH)/components/,$$\(ESP_LIB_DIR\)/,$(dir))) $$\(ESP_LIB_DIR\)/include >> $(MONO_SNIPPET)
@@ -67,7 +63,7 @@ snippets:
 	@echo CXXFLAGS := -std=gnu++11 -fno-exceptions -fno-rtti -Og -ggdb -ffunction-sections -fdata-sections -fstrict-volatile-bitfields -mlongcalls -nostdlib -Wall -Werror=all -Wno-error=unused-function -Wno-error=unused-but-set-variable -Wno-error=unused-variable -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wno-sign-compare >> $(MONO_SNIPPET)
 	@echo export CPPFLAGS CFLAGS CXXFLAGS >> $(MONO_SNIPPET)
 	@echo INCFLAGS := -I $$\(MONO_PATH\) $$\(foreach dir,$$\(ESP_INCLUDE_DIRS\),-I $$\(dir\)\) >> $(MONO_SNIPPET)
-	@echo LDFLAGS=-nostdlib -u call_user_start_cpu0 -Wl,--gc-sections -Wl,-static -Wl,--start-group \
+	@echo LDFLAGS := -nostdlib -u call_user_start_cpu0 -Wl,--gc-sections -Wl,-static -Wl,--start-group \
 		-L$$\(ESP_LIB_DIR\) \
 			-lapp_trace -lapp_update -lbootloader_support -lbt -lcoap -ldriver -lesp32 -lethernet -lexpat -lfatfs -lheap -ljsmn -ljson -llibsodium -llog -llwip -lmbedtls -lmdns -lmicro-ecc -lnewlib -lnghttp -lnvs_flash -lopenssl -lsdmmc -lsoc \
 			-lspi_flash -ltcpip_adapter -lulp -lvfs -lwear_levelling -lwpa_supplicant -lxtensa-debug-module \
@@ -80,6 +76,7 @@ snippets:
 			-T esp32_out.ld -u ld_include_panic_highint_hdl -T esp32.common.ld -T esp32.rom.ld -T esp32.peripherals.ld \
 		-lgcc -lstdc++ -Wl,--end-group -Wl,-EL \
 	>> $(MONO_SNIPPET)
+	cp mono.mk $(MONO_OUTPUT_DIR)/
 
 debug:
 	@echo INCLUDE_DIRS=$(INCLUDE_DIRS)

@@ -30,7 +30,7 @@ To install the dependencies, see
 - [ ] Make the trivial framework and Mono32 work with [OpenOCD](https://github.com/espressif/openocd-esp32) such that it is possible to single-step debug.
 - [ ] Auto detect which serial port the Mono32 is running on so that one does not have to specify the port.
 - [ ] Port one [app](http://kiosk.openmono.com) at a time to this new framework, building up the framework along the way.
-- [ ] Generate (parts of) `mono.mk` instead of hard-coding settings dug out from ESP-IDF.
+- [x] Generate (parts of) `mono.mk` instead of hard-coding settings dug out from ESP-IDF.
 - [ ] Cleanup non-header files, eg. in `console/`.
 
 ----
