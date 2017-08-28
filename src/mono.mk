@@ -6,6 +6,7 @@ include $(MONO_PATH)/mono-env.mk
 
 .PHONY: all flash clean debug
 
+BAUD_RATE ?= 115200
 BUILD_DIR ?= build
 MKDIR ?= mkdir -p
 RM_F ?= rm -f
@@ -46,7 +47,7 @@ flash: $(BUILD_DIR)/$(MONO_APP).bin
 	python $(ESP_LIB_DIR)/esptool.py \
 		--chip esp32 \
 		--port $${SERIAL_PORT:?not set} \
-		--baud 115200 \
+		--baud $(BAUD_RATE) \
 		--before default_reset \
 		--after hard_reset write_flash \
 		-z \

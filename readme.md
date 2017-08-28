@@ -26,12 +26,15 @@ To install the dependencies, see
 ## Plan
 
 - [x] Create a build system that produces a trivial Mono framework, such that the framework and tool chain are the only dependencies needed to build applications and flash them to Mono32 hardware.
-- [ ] Setup continuous integration infrastructure to monitor and build when this repo changes.
+- [x] Setup continuous integration infrastructure to monitor and build when this repo changes.
 - [ ] Make the trivial framework and Mono32 work with [OpenOCD](https://github.com/espressif/openocd-esp32) such that it is possible to single-step debug.
 - [ ] Auto detect which serial port the Mono32 is running on so that one does not have to specify the port.
+- [x] Make transfer speed (flash) configurable (`--baud 2000000`).
 - [ ] Port one [app](http://kiosk.openmono.com) at a time to this new framework, building up the framework along the way.
 - [x] Generate (parts of) `mono.mk` instead of hard-coding settings dug out from ESP-IDF.
 - [ ] Cleanup non-header files, eg. in `console/`.
+- [ ] Encapsulate ESP32 SPI to the screen into mbed spi.
+- [ ] Autobuild a distributable bundle with the libs, headers, and xtensa-esp-elf tool chain.
 
 ----
 

@@ -9,9 +9,9 @@ ESP_LDSCRIPT_DIR := $(ESP_LIB_DIR)/ld
 
 MONO_SNIPPET := $(MONO_OUTPUT_DIR)/mono-env.mk
 
-.PHONY: framework framework-clean debug components component-headers esptool snippets
+.PHONY: framework framework-clean debug components component-headers esptool snippets static
 
-framework: bootloader partition_table components component-headers esptool snippets
+framework: bootloader partition_table components component-headers esptool snippets static
 	mkdir -p $(ESP_LIB_DIR)
 	cp $(BUILD_DIR_BASE)/bootloader/bootloader.bin $(ESP_LIB_DIR)/
 	cp $(BUILD_DIR_BASE)/partitions_singleapp.bin $(ESP_LIB_DIR)/
@@ -76,7 +76,10 @@ snippets:
 			-T esp32_out.ld -u ld_include_panic_highint_hdl -T esp32.common.ld -T esp32.rom.ld -T esp32.peripherals.ld \
 		-lgcc -lstdc++ -Wl,--end-group -Wl,-EL \
 	>> $(MONO_SNIPPET)
+
+static:
 	cp mono.mk $(MONO_OUTPUT_DIR)/
+	cp end-user-readme.md $(MONO_OUTPUT_DIR)/readme.md
 
 debug:
 	@echo INCLUDE_DIRS=$(INCLUDE_DIRS)
