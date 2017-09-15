@@ -5,5 +5,8 @@
    , { "path": "../../esp-idf"
     , "file_exclude_patterns": []
     }
+   , { "path": "../../openocd-esp32"
+    , "file_exclude_patterns": []
+    }
   ]
 }

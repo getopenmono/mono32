@@ -14,13 +14,16 @@ that is, the compiler tool chain, the [ESP libraries](https://github.com/espress
 
 To install the dependencies, see
 
-- [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).  To update everything, do `git pull; git submodule update` inside esp-idf.
+- [Espressif IoT Development Framework](https://github.com/espressif/esp-idf).
 - Tool chain: [MacOS](https://dl.espressif.com/dl/xtensa-esp32-elf-osx-1.22.0-61-gab8375a-5.2.0.tar.gz) or [Windows](http://esp-idf.readthedocs.io/en/latest/get-started/windows-setup.html) or [Linux](http://esp-idf.readthedocs.io/en/latest/get-started/linux-setup.html).
+
+To update the dependencies, run `update-dependencies.sh`.
+
+For single-step debugging etc., see (`debugging.md`)[debugging.md].
 
 ## External documentation
 
 - [Espressif IoT Development Framework](http://esp-idf.readthedocs.io/en/latest/).
-- [OpenOCD-ESP32](https://github.com/espressif/openocd-esp32).
 - [Espressif Datasheets](https://espressif.com/en/products/hardware/esp32/resources).
 
 ## Plan
