@@ -19,7 +19,7 @@ To install the dependencies, see
 
 To update the dependencies, run `update-dependencies.sh`.
 
-For single-step debugging etc., see (`debugging.md`)[debugging.md].
+For single-step debugging etc., see [`debugging.md`](debugging.md).
 
 ## External documentation
 
