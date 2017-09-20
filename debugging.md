@@ -17,9 +17,26 @@ You might need to unload the FTDI driver:
 
 {Need a supported JTAG adapter. jlink. FT232R USB UART}
 
-segger?
+{segger?}
 
 ## Run OpenOCD
+
+Copy & modify the board/esp-wroom-32.cfg file to read
+
+    transport select jtag
+    adapter_khz 20000
+    set ESP32_ONLYCPU 1
+    set ESP32_RTOS none
+    source [find target/esp32.cfg]
+
+The options
+
+    set ESP32_ONLYCPU 1
+    set ESP32_RTOS none
+
+makes it simpler to debug ony the app.
+
+Then start
 
     $ bin/openocd -s share/openocd/scripts -f interface/jlink.cfg -f board/esp-wroom-32.cfg
 
@@ -28,15 +45,13 @@ should give
     Info : No device selected, using first device.
     Info : J-Link compiled Mar 29 2006 19:58:46 ARM Rev.5
     Info : Hardware version: 5.30
-    Info : VTarget = 3.293 V
+    Info : VTarget = 3.300 V
     Info : Reduced speed from 20000 kHz to 12000 kHz (maximum).
     Info : Reduced speed from 20000 kHz to 12000 kHz (maximum).
     Info : clock speed 20000 kHz
     Info : JTAG tap: esp32.cpu0 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-    Info : JTAG tap: esp32.cpu1 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-    Info : esp32: Debug controller was reset (pwrstat=0x5F, after clear 0x0F).
-    Info : esp32: Core was reset (pwrstat=0x5F, after clear 0x0F).
-
+    Info : JTAG tap: esp32.ignored tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+    Info : esp32.cpu0: Target halted, pc=0x400D0920
 
 ## Using the debugger
 
@@ -57,17 +72,17 @@ Start debugger
 gives output in GDB:
 
     JTAG tap: esp32.cpu0 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-    JTAG tap: esp32.cpu1 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
-    esp32: Debug controller was reset (pwrstat=0x5F, after clear 0x0F).
-    esp32: Core was reset (pwrstat=0x5F, after clear 0x0F).
-    Target halted. PRO_CPU: PC=0x5000004B (active)    APP_CPU: PC=0x00000000 
-    esp32: target state: halted
-    esp32: Core was reset (pwrstat=0x1F, after clear 0x0F).
-    Target halted. PRO_CPU: PC=0x40000400 (active)    APP_CPU: PC=0x40000400 
-    esp32: target state: halted
+    JTAG tap: esp32.ignored tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+    esp32.cpu0: Debug controller was reset (pwrstat=0x5F, after clear 0x0F).
+    esp32.cpu0: Core was reset (pwrstat=0x5F, after clear 0x0F).
+    esp32.cpu0: Target halted, pc=0x5000004B
+    esp32.cpu0: target state: halted
+    esp32.cpu0: Core was reset (pwrstat=0x1F, after clear 0x0F).
+    esp32.cpu0: Target halted, pc=0x40000400
+    esp32.cpu0: target state: halted
     Hardware assisted breakpoint 1 at 0x400d0884: file display.c, line 258.
     0x0:    0x00000000
-
+    esp32.cpu0: Target halted, pc=0x400D0884
 
 gives OCD output:
 
